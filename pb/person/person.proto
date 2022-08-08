@@ -1,0 +1,45 @@
+syntax = "proto3"; //语法是 proto3语法
+package person ; //pb文件的包名是 person
+//go_package="包路径（从mod下开始写）或者也可以直接 ./ 代表当前目录下 ;别名"
+//这个option go_package 别名 会用在pb下的包导入之间 会生成
+// import  person   github.com/kaikaichao/grpctest/pb/person
+option go_package="github.com/kaikaichao/grpctest/pb/person;person"  ;
+import "home/home.proto";  //记得这个导入从pb文件下的文件夹开始
+
+message  Student{
+    repeated  Person persons=1; //结构体嵌套
+    message  Visitor{           //接头体嵌套
+        string name=1;
+    }
+    Visitor visitor=2;   //得使用 声明 才可以嵌套
+}
+
+//结构体
+message  Person{
+    string name=1;
+    int32  age=2;
+    repeated string test=4;//切片
+    //map ，<string,string>   第一个参数只能是string  或者int,作为key,第二个则无所谓
+    map<string,string> test_map=5;
+    //reserved  "name"; //Field name "name" is reserved. 生成的时候会报错 字段的关键词保留
+    //枚举
+    //普通结构体 message 会将字段 名称大写，但是 枚举的值 字段 不会大写，所以需要自己写成大写
+    enum Sex{
+        option allow_alias =true;//如果枚举的值有相同的话，那么可以设置下 allow _alias
+        Man =0;
+        Woman=1;
+        Girl=1;
+    }
+    Sex sex=6;
+
+    //oneof
+    //Oneof定义用来代表在实现的时候，该组属性中有且只能有一个被定义，不能出现多个
+    //不可以被repeated 不能是数组
+    oneof  test_oneof{
+        string one=7;
+        string two=8;
+    }
+    home.Home i_home = 9; //home.Home 是用 home.proto 里边的  package  home
+}
+
+

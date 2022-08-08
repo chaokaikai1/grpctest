@@ -1,0 +1,7 @@
+syntax = "proto3";
+package home;
+option go_package="github.com/kaikaichao/grpctest/pb/home;home"  ;
+message Home{
+    string name =1;
+}
+
